@@ -39,6 +39,12 @@
       ansible.builtin.debug:
         var: ec2_output
 
+    - name: print public_ip
+      ansible.builtin.debug: "{{ item.instances[0].public_ip_address }}, {{ item.instances[0].private_ip_address }}"
+      loop: "{{ ec2_output.results }}"
+
+    
+
   # vars:
   #   ansible_python_interpreter: /usr/bin/python3
   #   region: us-east-1
