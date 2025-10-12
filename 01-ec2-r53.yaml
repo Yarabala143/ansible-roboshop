@@ -8,6 +8,7 @@
     sg_id: "sg-0b10412d77bb679e9"
     zone_id: Z03935562DFKW1R55AYOI
     domain_name: yarabala.space
+    ttl: 1
     instance:
       - mongodb
 
@@ -39,9 +40,22 @@
     #   ansible.builtin.debug:
     #     var: ec2_output
 
-    - name: print public_ip
-      ansible.builtin.debug: 
-       msg: "{{ item.instances[0].public_ip_address }}, {{ item.instances[0].private_ip_address }}"
+    # - name: print public_ip
+    #   ansible.builtin.debug: 
+    #    msg: "{{ item.instances[0].public_ip_address }}, {{ item.instances[0].private_ip_address }}"
+    #   loop: "{{ ec2_output.results }}"
+
+    - name: add new r53 record for the new ec2 instance
+      community.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "{{ item.item }}.{{ domain_name }}"
+        #record: "{{ record_name }}"
+        type: A
+        ttl: "{{ ttl }}"
+        value: "{{ item.instances[0].private_ip_address }}"
+        #value: "{{ ec2.instances[0].public_ip }}"
+        overwrite: true
       loop: "{{ ec2_output.results }}"
 
     
@@ -80,11 +94,4 @@
   #    ansible.builtin.debug:
   #     var: ec2
 
-  #  - name: add new r53 record for the new ec2 instance
-  #    community.aws.route53:
-  #     state: present
-  #     zone: "{{ domain_name }}"
-  #     record: "{{ record_name }}"
-  #     type: A
-  #     ttl: "{{ ttl }}"
-  #     value: "{{ ec2.instances[0].public_ip }}"
+  
