@@ -2,7 +2,7 @@
   hosts: local
   connection: local
   vars:
-    ami_id: ami-0c02fb55956c7d316
+    ami_id: ami-09c813fb71547fc4f
     sg_id: sg-0b10412d77bb679e9
     zone_id: Z03935562DFKW1R55AYOI
     domain_name: yarabala.space
