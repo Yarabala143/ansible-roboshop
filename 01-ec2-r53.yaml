@@ -1,39 +1,44 @@
-- user: create ec2 and r53
-  hosts: local
+- name: create ec2 and r53
+  hosts: localhost
   connection: local
+  gather_facts: false
   vars:
     ami_id: ami-09c813fb71547fc4f
-    region: Us-east-1
+    region: us-east-1
     sg_id: sg-0b10412d77bb679e9
     zone_id: Z03935562DFKW1R55AYOI
     domain_name: yarabala.space
     instance:
-    - mongodb
+      - mongodb
 
+  tasks:
     - name: validate input variables
       ansible.builtin.debug:
         msg:
-        - "AMI ID: {{ ami_id }}"
-        - "Region: {{ region }}"
-        - "Security Group ID: {{ sg_id }}"
-        - "Instance List: {{ instance }}"
+          - "AMI ID: {{ ami_id }}"
+          - "Region: {{ region }}"
+          - "Security Group ID: {{ sg_id }}"
+          - "Instance List: {{ instance }}"
 
-    tasks:
     - name: create ec2 instance
       amazon.aws.ec2_instance:
         name: "{{ item }}"
         instance_type: t3.micro
-        region: "{{ region }}"
-        security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
+        region: "{{ region }}"
+        security_group_ids: ["{{ sg_id }}"]
+        # key_name: my-key-pair         # add if your AMI/VPC requires a key
+        # subnet_id: subnet-xxxxxxxx    # add if you need to place instance in a subnet
         tags:
           Name: "{{ item }}"
+        wait: yes
       loop: "{{ instance }}"
       register: ec2_output
 
     - name: print the ec2_output
       ansible.builtin.debug:
-        msg: "{{ec2_output}}"
+        var: ec2_output
+
   # vars:
   #   ansible_python_interpreter: /usr/bin/python3
   #   region: us-east-1
