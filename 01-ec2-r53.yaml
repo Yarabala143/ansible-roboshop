@@ -3,6 +3,7 @@
   connection: local
   vars:
     ami_id: ami-09c813fb71547fc4f
+    region: Us-east-1
     sg_id: sg-0b10412d77bb679e9
     zone_id: Z03935562DFKW1R55AYOI
     domain_name: yarabala.space
