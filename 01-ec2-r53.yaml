@@ -9,7 +9,15 @@
     domain_name: yarabala.space
     instance:
     - mongodb
-    
+
+    - name: validate input variables
+      ansible.builtin.debug:
+        msg:
+        - "AMI ID: {{ ami_id }}"
+        - "Region: {{ region }}"
+        - "Security Group ID: {{ sg_id }}"
+        - "Instance List: {{ instance }}"
+
     tasks:
     - name: create ec2 instance
       amazon.aws.ec2_instance:
