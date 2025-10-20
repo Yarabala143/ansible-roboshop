@@ -70,11 +70,11 @@
     ansible.builtin.command: mongosh mongodb.yarabala.space --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
     register: catalogue_output
 
-  # - name: evaluate cataalogue database
-  #   community.mongodb.mongodb_shell:
-  #     login_host: mongodb.yarabala.space
-  #     eval: db.getMongo().getDBNames().indexOf('catalogue')
-  #   register: catalogue_output
+  - name: evaluate cataalogue database
+    community.mongodb.mongodb_shell:
+      login_host: mongodb.yarabala.space
+      eval: db.getMongo().getDBNames().indexOf('catalogue')
+    register: catalogue_output
 
   # - name: print catalogue output
   #   ansible.builtin.debug:
